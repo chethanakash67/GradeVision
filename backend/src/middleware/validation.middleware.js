@@ -10,21 +10,25 @@ export const validate = (req, res, next) => {
   next();
 };
 
+export const validateRegister = [
+  body('email').isEmail().withMessage('Please provide a valid email'),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters'),
+  body('firstName').notEmpty().withMessage('First name is required'),
+  body('lastName').notEmpty().withMessage('Last name is required'),
+  validate
+];
+
+export const validateLogin = [
+  body('email').isEmail().withMessage('Please provide a valid email'),
+  body('password').notEmpty().withMessage('Password is required'),
+  validate
+];
+
 export const authValidation = {
-  register: [
-    body('email').isEmail().withMessage('Please provide a valid email'),
-    body('password')
-      .isLength({ min: 6 })
-      .withMessage('Password must be at least 6 characters'),
-    body('firstName').notEmpty().withMessage('First name is required'),
-    body('lastName').notEmpty().withMessage('Last name is required'),
-    validate
-  ],
-  login: [
-    body('email').isEmail().withMessage('Please provide a valid email'),
-    body('password').notEmpty().withMessage('Password is required'),
-    validate
-  ]
+  register: validateRegister,
+  login: validateLogin
 };
 
 export const studentValidation = {

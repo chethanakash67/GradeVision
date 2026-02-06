@@ -1,12 +1,13 @@
 import { Student } from '../models/Student.model.js';
 import { AppError, catchAsync } from '../middleware/error.middleware.js';
+import * as predictionService from '../services/prediction.service.js';
 
 /**
  * @desc    Get all students
  * @route   GET /api/students
  * @access  Private
  */
-export const getStudents = catchAsync(async (req, res, next) => {
+export const getAllStudents = catchAsync(async (req, res, next) => {
   const { grade, section, riskLevel } = req.query;
   
   const filters = {};
@@ -102,5 +103,30 @@ export const getStudentStats = catchAsync(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: stats
+  });
+});
+
+/**
+ * @desc    Get student performance with prediction
+ * @route   GET /api/students/:id/performance
+ * @access  Private
+ */
+export const getStudentPerformance = catchAsync(async (req, res, next) => {
+  const student = await Student.findById(req.params.id);
+
+  if (!student) {
+    return next(new AppError('Student not found', 404));
+  }
+
+  const prediction = predictionService.predictPerformance(student);
+  const recommendations = predictionService.generateRecommendations(student, prediction);
+
+  res.status(200).json({
+    success: true,
+    data: {
+      student,
+      prediction,
+      recommendations
+    }
   });
 });

@@ -1,12 +1,13 @@
 import analyticsService from '../services/analytics.service.js';
+import { Student } from '../models/Student.model.js';
 import { catchAsync } from '../middleware/error.middleware.js';
 
 /**
- * @desc    Get overview statistics
- * @route   GET /api/analytics/overview
+ * @desc    Get dashboard statistics
+ * @route   GET /api/analytics/dashboard
  * @access  Private
  */
-export const getOverview = catchAsync(async (req, res, next) => {
+export const getDashboardStats = catchAsync(async (req, res, next) => {
   const stats = await analyticsService.getOverviewStats();
 
   res.status(200).json({
@@ -16,11 +17,25 @@ export const getOverview = catchAsync(async (req, res, next) => {
 });
 
 /**
+ * @desc    Get performance trends
+ * @route   GET /api/analytics/performance/trends
+ * @access  Private
+ */
+export const getPerformanceTrends = catchAsync(async (req, res, next) => {
+  const trends = await analyticsService.getPerformanceTrends();
+
+  res.status(200).json({
+    success: true,
+    data: trends
+  });
+});
+
+/**
  * @desc    Get attendance analytics
  * @route   GET /api/analytics/attendance
  * @access  Private
  */
-export const getAttendance = catchAsync(async (req, res, next) => {
+export const getAttendanceAnalytics = catchAsync(async (req, res, next) => {
   const analytics = await analyticsService.getAttendanceAnalytics();
 
   res.status(200).json({
@@ -30,40 +45,54 @@ export const getAttendance = catchAsync(async (req, res, next) => {
 });
 
 /**
- * @desc    Get performance analytics
- * @route   GET /api/analytics/performance
+ * @desc    Get risk distribution
+ * @route   GET /api/analytics/risk-distribution
  * @access  Private
  */
-export const getPerformance = catchAsync(async (req, res, next) => {
-  const analytics = await analyticsService.getPerformanceAnalytics();
+export const getRiskDistribution = catchAsync(async (req, res, next) => {
+  const distribution = await analyticsService.getRiskDistribution();
 
   res.status(200).json({
     success: true,
-    data: analytics
+    data: distribution
   });
 });
 
 /**
- * @desc    Get engagement analytics
- * @route   GET /api/analytics/engagement
+ * @desc    Get subject performance
+ * @route   GET /api/analytics/performance/subjects
  * @access  Private
  */
-export const getEngagement = catchAsync(async (req, res, next) => {
-  const analytics = await analyticsService.getEngagementAnalytics();
+export const getSubjectPerformance = catchAsync(async (req, res, next) => {
+  const performance = await analyticsService.getSubjectPerformance();
 
   res.status(200).json({
     success: true,
-    data: analytics
+    data: performance
   });
 });
 
 /**
- * @desc    Get comparative analytics for a student
- * @route   GET /api/analytics/compare/:studentId
+ * @desc    Get class comparison
+ * @route   GET /api/analytics/performance/class-comparison
  * @access  Private
  */
-export const getComparison = catchAsync(async (req, res, next) => {
-  const analytics = await analyticsService.getComparativeAnalytics(req.params.studentId);
+export const getClassComparison = catchAsync(async (req, res, next) => {
+  const comparison = await analyticsService.getClassComparison();
+
+  res.status(200).json({
+    success: true,
+    data: comparison
+  });
+});
+
+/**
+ * @desc    Get individual student analytics
+ * @route   GET /api/analytics/student/:id
+ * @access  Private
+ */
+export const getStudentAnalytics = catchAsync(async (req, res, next) => {
+  const analytics = await analyticsService.getStudentAnalytics(req.params.id);
 
   if (!analytics) {
     return res.status(404).json({

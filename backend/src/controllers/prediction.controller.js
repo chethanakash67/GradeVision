@@ -1,14 +1,14 @@
 import { Student } from '../models/Student.model.js';
-import predictionService from '../services/prediction.service.js';
+import * as predictionService from '../services/prediction.service.js';
 import { AppError, catchAsync } from '../middleware/error.middleware.js';
 
 /**
  * @desc    Get prediction for a student
- * @route   GET /api/predictions/:studentId
+ * @route   GET /api/predictions/student/:id
  * @access  Private
  */
-export const getStudentPrediction = catchAsync(async (req, res, next) => {
-  const student = await Student.findById(req.params.studentId);
+export const getPrediction = catchAsync(async (req, res, next) => {
+  const student = await Student.findById(req.params.id);
 
   if (!student) {
     return next(new AppError('Student not found', 404));
@@ -34,11 +34,11 @@ export const getStudentPrediction = catchAsync(async (req, res, next) => {
 });
 
 /**
- * @desc    Get predictions for all students
- * @route   GET /api/predictions
+ * @desc    Get batch predictions for all students
+ * @route   GET /api/predictions/batch
  * @access  Private
  */
-export const getAllPredictions = catchAsync(async (req, res, next) => {
+export const getBatchPredictions = catchAsync(async (req, res, next) => {
   const students = await Student.findAll();
 
   const predictions = students.map(student => {
@@ -193,3 +193,72 @@ const getFactorExplanation = (factor) => {
 
   return explanations[factor.feature] || 'This factor contributes to the overall prediction.';
 };
+
+/**
+ * @desc    Get AI recommendations for a student
+ * @route   GET /api/predictions/recommendations/:id
+ * @access  Private
+ */
+export const getRecommendations = catchAsync(async (req, res, next) => {
+  const student = await Student.findById(req.params.id);
+
+  if (!student) {
+    return next(new AppError('Student not found', 404));
+  }
+
+  const prediction = predictionService.predictPerformance(student);
+  const recommendations = predictionService.generateRecommendations(student, prediction);
+
+  res.status(200).json({
+    success: true,
+    data: recommendations
+  });
+});
+
+/**
+ * @desc    Get explainable AI insights
+ * @route   GET /api/predictions/explain/:id
+ * @access  Private
+ */
+export const getExplainableInsights = catchAsync(async (req, res, next) => {
+  const student = await Student.findById(req.params.id);
+
+  if (!student) {
+    return next(new AppError('Student not found', 404));
+  }
+
+  const prediction = predictionService.predictPerformance(student);
+  const insights = predictionService.generateInsights(student, prediction);
+
+  res.status(200).json({
+    success: true,
+    data: {
+      prediction,
+      insights,
+      explanation: `Based on our AI analysis, ${student.firstName} has a ${prediction.performanceScore}% performance score with a ${prediction.riskLevel} risk level.`
+    }
+  });
+});
+
+/**
+ * @desc    Get feature importance for a student
+ * @route   GET /api/predictions/feature-importance/:id
+ * @access  Private
+ */
+export const getFeatureImportance = catchAsync(async (req, res, next) => {
+  const student = await Student.findById(req.params.id);
+
+  if (!student) {
+    return next(new AppError('Student not found', 404));
+  }
+
+  const prediction = predictionService.predictPerformance(student);
+
+  res.status(200).json({
+    success: true,
+    data: {
+      featureImportance: prediction.featureImportance,
+      summary: 'These factors show how different aspects of student performance contribute to the overall prediction.'
+    }
+  });
+});

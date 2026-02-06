@@ -5,12 +5,25 @@ const users = new Map();
 
 // Default admin user
 users.set('admin@gradevision.edu', {
-  id: uuidv4(),
+  id: 'admin-user-id',
   email: 'admin@gradevision.edu',
   password: '$2a$10$example', // In real app, this would be hashed
   firstName: 'Admin',
   lastName: 'User',
   role: 'admin',
+  avatar: null,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString()
+});
+
+// Demo user
+users.set('demo@gradevision.edu', {
+  id: 'demo-user-id',
+  email: 'demo@gradevision.edu',
+  password: '$2a$10$demo', // In real app, this would be hashed
+  firstName: 'Demo',
+  lastName: 'User',
+  role: 'teacher',
   avatar: null,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString()

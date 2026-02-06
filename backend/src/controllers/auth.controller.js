@@ -62,37 +62,44 @@ export const register = catchAsync(async (req, res, next) => {
 export const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
-  // Demo login - allow any credentials for testing
-  // In production, you would validate against the database
-  
-  // Check for demo accounts
-  if (email === 'demo@gradevision.edu' || email === 'admin@gradevision.edu') {
+  // Check for demo accounts first
+  if (email === 'demo@gradevision.edu') {
     const demoUser = {
       id: 'demo-user-id',
       email: email,
-      firstName: email === 'admin@gradevision.edu' ? 'Admin' : 'Demo',
+      firstName: 'Demo',
       lastName: 'User',
-      role: email === 'admin@gradevision.edu' ? 'admin' : 'student',
+      role: 'teacher',
       avatar: null
     };
-    
     return createSendToken(demoUser, 200, res);
+  }
+  
+  if (email === 'admin@gradevision.edu') {
+    const adminUser = {
+      id: 'admin-user-id',
+      email: email,
+      firstName: 'Admin',
+      lastName: 'User',
+      role: 'admin',
+      avatar: null
+    };
+    return createSendToken(adminUser, 200, res);
   }
 
   // Check for existing user
   const user = await User.findByEmail(email);
   
   if (!user) {
-    // For demo purposes, create a temporary user
-    const demoUser = {
-      id: `user-${Date.now()}`,
+    // For demo purposes, create and save a new user
+    const newUser = await User.create({
       email: email,
-      firstName: 'User',
-      lastName: '',
-      role: 'student',
-      avatar: null
-    };
-    return createSendToken(demoUser, 200, res);
+      password: await bcrypt.hash(password || 'demo123', 10),
+      firstName: email.split('@')[0],
+      lastName: 'User',
+      role: 'student'
+    });
+    return createSendToken(newUser, 200, res);
   }
 
   // In production, verify password
@@ -153,5 +160,22 @@ export const logout = catchAsync(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: 'Logged out successfully'
+  });
+});
+
+/**
+ * @desc    Change password
+ * @route   PUT /api/auth/password
+ * @access  Private
+ */
+export const changePassword = catchAsync(async (req, res, next) => {
+  const { currentPassword, newPassword } = req.body;
+
+  // In production, verify current password and update
+  // For demo, just return success
+  
+  res.status(200).json({
+    success: true,
+    message: 'Password updated successfully'
   });
 });

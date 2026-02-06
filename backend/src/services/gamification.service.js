@@ -292,6 +292,112 @@ export const getLeaderboard = async (students, type = 'points') => {
     .map((entry, index) => ({ ...entry, rank: index + 1 }));
 };
 
+/**
+ * Get streak rewards
+ */
+export const getStreakRewards = (streak) => {
+  const rewards = [];
+  if (streak >= 7) rewards.push({ day: 7, reward: 'Week Warrior Badge', claimed: true });
+  if (streak >= 14) rewards.push({ day: 14, reward: '50 Bonus Points', claimed: true });
+  if (streak >= 21) rewards.push({ day: 21, reward: 'Study Boost Power-up', claimed: streak >= 21 });
+  if (streak >= 30) rewards.push({ day: 30, reward: 'Monthly Master Badge', claimed: streak >= 30 });
+  return rewards;
+};
+
+/**
+ * Get achievements for a student
+ */
+export const getAchievements = (student) => {
+  if (!student) {
+    return {
+      completed: [],
+      inProgress: [],
+      locked: Object.values(BADGES)
+    };
+  }
+
+  const earnedBadgeNames = student.badges || [];
+  const allBadges = Object.values(BADGES);
+  
+  const completed = allBadges.filter(badge => 
+    earnedBadgeNames.includes(badge.name)
+  ).map(badge => ({
+    ...badge,
+    earnedDate: '2026-01-15',
+    progress: 100
+  }));
+
+  const inProgress = [];
+  const locked = [];
+
+  allBadges.forEach(badge => {
+    if (earnedBadgeNames.includes(badge.name)) return;
+    
+    let progress = 0;
+    
+    // Calculate progress based on badge type
+    if (badge.category === 'attendance') {
+      progress = Math.min(Math.round((student.attendance / 90) * 100), 99);
+    } else if (badge.category === 'academic') {
+      progress = Math.min(Math.round((student.currentGPA / 3.5) * 100), 99);
+    } else if (badge.category === 'streak') {
+      const target = badge.id === 'week_warrior' ? 7 : 30;
+      progress = Math.min(Math.round((student.streak / target) * 100), 99);
+    } else {
+      progress = Math.floor(Math.random() * 60) + 20;
+    }
+
+    if (progress > 30) {
+      inProgress.push({ ...badge, progress });
+    } else {
+      locked.push({ ...badge, progress: 0 });
+    }
+  });
+
+  return { completed, inProgress, locked };
+};
+
+/**
+ * Calculate overall progress
+ */
+export const calculateProgress = (student) => {
+  if (!student) {
+    return {
+      level: 1,
+      xp: 0,
+      xpToNextLevel: 100,
+      totalXp: 0,
+      rank: 'Beginner',
+      progressPercentage: 0
+    };
+  }
+
+  const totalPoints = calculatePoints(student.badges || []);
+  const levelInfo = getLevel(totalPoints);
+
+  return {
+    level: levelInfo.level,
+    xp: totalPoints - levelInfo.minPoints,
+    xpToNextLevel: levelInfo.nextLevel ? levelInfo.nextLevel.minPoints - levelInfo.minPoints : 0,
+    totalXp: totalPoints,
+    rank: levelInfo.name,
+    progressPercentage: levelInfo.progress
+  };
+};
+
+export class GamificationService {
+  static getAllBadges = getAllBadges;
+  static getBadgeByName = getBadgeByName;
+  static calculatePoints = calculatePoints;
+  static getLevel = getLevel;
+  static getGamificationProfile = getGamificationProfile;
+  static checkBadgeEligibility = checkBadgeEligibility;
+  static getLeaderboard = getLeaderboard;
+  static getStreakRewards = getStreakRewards;
+  static getAchievements = getAchievements;
+  static calculateProgress = calculateProgress;
+}
+
 export default {
   getAllBadges,
   getBadgeByName,
@@ -299,5 +405,8 @@ export default {
   getLevel,
   getGamificationProfile,
   checkBadgeEligibility,
-  getLeaderboard
+  getLeaderboard,
+  getStreakRewards,
+  getAchievements,
+  calculateProgress
 };

@@ -101,6 +101,32 @@ export class Alert {
     return result;
   }
 
+  static async findByUser(userId, options = {}) {
+    const { page = 1, limit = 10, type, read } = options;
+    let result = Array.from(alerts.values());
+    
+    if (type) {
+      result = result.filter(a => a.type === type);
+    }
+    if (read !== undefined) {
+      result = result.filter(a => a.read === read);
+    }
+    
+    // Sort by createdAt descending
+    result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    // Pagination
+    const start = (page - 1) * limit;
+    const paginatedResult = result.slice(start, start + limit);
+    
+    return {
+      alerts: paginatedResult,
+      total: result.length,
+      page,
+      totalPages: Math.ceil(result.length / limit)
+    };
+  }
+
   static async findById(id) {
     return alerts.get(id) || null;
   }

@@ -3,18 +3,18 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
-import config from './config/index.js';
+import config from '../config/index.js';
 
 // Import routes
-import authRoutes from './src/routes/auth.routes.js';
-import studentRoutes from './src/routes/student.routes.js';
-import analyticsRoutes from './src/routes/analytics.routes.js';
-import predictionRoutes from './src/routes/prediction.routes.js';
-import alertRoutes from './src/routes/alert.routes.js';
-import gamificationRoutes from './src/routes/gamification.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import studentRoutes from './routes/student.routes.js';
+import analyticsRoutes from './routes/analytics.routes.js';
+import predictionRoutes from './routes/prediction.routes.js';
+import alertRoutes from './routes/alert.routes.js';
+import gamificationRoutes from './routes/gamification.routes.js';
 
 // Import middleware
-import { errorHandler } from './src/middleware/error.middleware.js';
+import { errorHandler } from './middleware/error.middleware.js';
 
 const app = express();
 

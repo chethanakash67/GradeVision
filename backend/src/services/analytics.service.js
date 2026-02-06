@@ -233,10 +233,152 @@ export const getComparativeAnalytics = async (studentId) => {
   };
 };
 
+/**
+ * Get performance trends
+ */
+export const getPerformanceTrends = async () => {
+  const students = await Student.findAll();
+  
+  const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan'];
+  const trends = months.map(month => {
+    let totalGPA = 0;
+    let totalAttendance = 0;
+    let count = 0;
+    
+    students.forEach(student => {
+      const monthData = student.performanceHistory?.find(h => h.month === month);
+      if (monthData) {
+        totalGPA += monthData.gpa;
+        totalAttendance += monthData.attendance;
+        count++;
+      }
+    });
+
+    return {
+      month,
+      averageGPA: count > 0 ? Math.round((totalGPA / count) * 100) / 100 : 0,
+      averageAttendance: count > 0 ? Math.round(totalAttendance / count) : 0
+    };
+  });
+
+  return trends;
+};
+
+/**
+ * Get risk distribution
+ */
+export const getRiskDistribution = async () => {
+  const students = await Student.findAll();
+  
+  const distribution = {
+    low: students.filter(s => s.riskLevel === 'low').length,
+    medium: students.filter(s => s.riskLevel === 'medium').length,
+    high: students.filter(s => s.riskLevel === 'high').length
+  };
+
+  const total = students.length;
+  
+  return {
+    distribution,
+    percentages: {
+      low: Math.round((distribution.low / total) * 100),
+      medium: Math.round((distribution.medium / total) * 100),
+      high: Math.round((distribution.high / total) * 100)
+    },
+    highRiskStudents: students
+      .filter(s => s.riskLevel === 'high')
+      .map(s => ({
+        id: s.id,
+        name: `${s.firstName} ${s.lastName}`,
+        gpa: s.currentGPA,
+        attendance: s.attendance
+      }))
+  };
+};
+
+/**
+ * Get subject performance
+ */
+export const getSubjectPerformance = async () => {
+  // Simulated subject performance data
+  return [
+    { subject: 'Mathematics', avgScore: 78, passRate: 85 },
+    { subject: 'Physics', avgScore: 72, passRate: 80 },
+    { subject: 'Chemistry', avgScore: 75, passRate: 82 },
+    { subject: 'English', avgScore: 82, passRate: 90 },
+    { subject: 'Computer Science', avgScore: 85, passRate: 92 },
+    { subject: 'Biology', avgScore: 79, passRate: 86 },
+    { subject: 'History', avgScore: 76, passRate: 84 }
+  ];
+};
+
+/**
+ * Get class comparison
+ */
+export const getClassComparison = async () => {
+  const students = await Student.findAll();
+  
+  const byGrade = {};
+  students.forEach(student => {
+    if (!byGrade[student.grade]) {
+      byGrade[student.grade] = { students: [], totalGPA: 0, totalAttendance: 0 };
+    }
+    byGrade[student.grade].students.push(student);
+    byGrade[student.grade].totalGPA += student.currentGPA;
+    byGrade[student.grade].totalAttendance += student.attendance;
+  });
+
+  return Object.entries(byGrade).map(([grade, data]) => ({
+    grade,
+    studentCount: data.students.length,
+    averageGPA: Math.round((data.totalGPA / data.students.length) * 100) / 100,
+    averageAttendance: Math.round(data.totalAttendance / data.students.length)
+  }));
+};
+
+/**
+ * Get individual student analytics
+ */
+export const getStudentAnalytics = async (studentId) => {
+  const student = await Student.findById(studentId);
+  if (!student) return null;
+
+  const students = await Student.findAll();
+  const classAvgGPA = students.reduce((sum, s) => sum + s.currentGPA, 0) / students.length;
+  const classAvgAttendance = students.reduce((sum, s) => sum + s.attendance, 0) / students.length;
+
+  return {
+    student: {
+      id: student.id,
+      name: `${student.firstName} ${student.lastName}`,
+      grade: student.grade,
+      section: student.section
+    },
+    metrics: {
+      gpa: student.currentGPA,
+      attendance: student.attendance,
+      studyHours: student.studyHours,
+      streak: student.streak,
+      assignmentCompletion: Math.round((student.assignmentsCompleted / student.totalAssignments) * 100)
+    },
+    comparison: {
+      gpaVsClass: Math.round((student.currentGPA - classAvgGPA) * 100) / 100,
+      attendanceVsClass: Math.round(student.attendance - classAvgAttendance)
+    },
+    performanceHistory: student.performanceHistory,
+    badges: student.badges
+  };
+};
+
 export default {
   getOverviewStats,
   getAttendanceAnalytics,
   getPerformanceAnalytics,
   getEngagementAnalytics,
-  getComparativeAnalytics
+  getComparativeAnalytics,
+  getPerformanceTrends,
+  getRiskDistribution,
+  getSubjectPerformance,
+  getClassComparison,
+  getStudentAnalytics
 };
