@@ -697,6 +697,15 @@
       "attempts": 0,
       "createdAt": "2026-02-06T18:29:21.716Z",
       "expiresAt": "2026-02-06T18:34:21.716Z"
+    },
+    {
+      "id": "58992be0-e80e-4a35-bf96-37dba53422af",
+      "email": "jainipreetham7@gmail.com",
+      "code": "444237",
+      "purpose": "signup",
+      "attempts": 1,
+      "createdAt": "2026-02-07T08:21:28.113Z",
+      "expiresAt": "2026-02-07T08:26:28.113Z"
     }
   ]
 }
