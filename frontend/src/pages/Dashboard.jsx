@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [alerts, setAlerts] = useState([]);
   const [students, setStudents] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -40,8 +41,17 @@ const Dashboard = () => {
       setStats(statsRes.data.data);
       setAlerts(alertsRes.data.data?.alerts || []);
       setStudents(studentsRes.data.data || []);
+      setError(null);
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
+      // Don't call logout here - let the API interceptor and AuthContext handle 401s.
+      // Calling logout() here causes a race condition where the user gets redirected
+      // to login even when the token is valid (e.g., if the backend is temporarily down).
+      if (error.response?.status === 401) {
+        setError('Session expired. Please log in again.');
+        return;
+      }
+      setError('Failed to load dashboard data. Please check if the server is running.');
     } finally {
       setLoading(false);
     }
@@ -51,6 +61,22 @@ const Dashboard = () => {
     return (
       <div className="flex items-center justify-center h-[60vh]">
         <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-[60vh]">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <button 
+            onClick={fetchDashboardData}
+            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     );
   }
@@ -98,6 +124,10 @@ const Dashboard = () => {
     danger: {
       bg: 'bg-danger-100 dark:bg-danger-900/30',
       icon: 'text-danger-600 dark:text-danger-400'
+    },
+    warning: {
+      bg: 'bg-warning-100 dark:bg-warning-900/30',
+      icon: 'text-warning-600 dark:text-warning-400'
     },
     secondary: {
       bg: 'bg-secondary-100 dark:bg-secondary-900/30',

@@ -26,6 +26,33 @@ export const validateLogin = [
   validate
 ];
 
+export const validateSendOtp = [
+  body('email').isEmail().withMessage('Please provide a valid email'),
+  body('purpose')
+    .isIn(['signup', 'forgot-password'])
+    .withMessage('Purpose must be signup or forgot-password'),
+  validate
+];
+
+export const validateVerifyOtp = [
+  body('email').isEmail().withMessage('Please provide a valid email'),
+  body('code')
+    .isLength({ min: 6, max: 6 })
+    .withMessage('OTP must be 6 digits'),
+  body('purpose')
+    .isIn(['signup', 'forgot-password'])
+    .withMessage('Purpose must be signup or forgot-password'),
+  validate
+];
+
+export const validateResetPassword = [
+  body('email').isEmail().withMessage('Please provide a valid email'),
+  body('newPassword')
+    .isLength({ min: 6 })
+    .withMessage('New password must be at least 6 characters'),
+  validate
+];
+
 export const authValidation = {
   register: validateRegister,
   login: validateLogin

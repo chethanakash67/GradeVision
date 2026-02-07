@@ -6,12 +6,15 @@ import { PageLoader } from './components/common/LoadingSpinner';
 
 // Pages
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Analytics from './pages/Analytics';
 import Students from './pages/Students';
 import Predictions from './pages/Predictions';
 import Gamification from './pages/Gamification';
 import Profile from './pages/Profile';
+import LandingPage from './pages/LandingPage';
+import ForgotPassword from './pages/ForgotPassword';
 
 // Protected Route Wrapper
 const ProtectedRoute = () => {
@@ -57,6 +60,8 @@ const AppRoutes = () => {
       {/* Public Routes */}
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
 
       {/* Protected Routes */}
@@ -69,11 +74,11 @@ const AppRoutes = () => {
         <Route path="/settings" element={<Profile />} />
       </Route>
 
-      {/* Redirect root to dashboard */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      {/* Landing page - accessible to everyone */}
+      <Route path="/" element={<LandingPage />} />
       
-      {/* 404 - Redirect to dashboard */}
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      {/* 404 - Redirect to landing page for unknown routes */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

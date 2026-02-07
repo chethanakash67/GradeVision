@@ -1,152 +1,32 @@
 import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// In-memory student storage with sample data
-const students = new Map();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DB_PATH = path.join(__dirname, '../../db.json');
 
-// Generate sample students
-const sampleStudents = [
-  {
-    id: uuidv4(),
-    userId: null,
-    studentId: 'STU001',
-    firstName: 'Alex',
-    lastName: 'Johnson',
-    email: 'alex.johnson@student.edu',
-    grade: '10',
-    section: 'A',
-    subjects: ['Mathematics', 'Physics', 'Chemistry', 'English', 'Computer Science'],
-    attendance: 92,
-    currentGPA: 3.7,
-    riskLevel: 'low',
-    enrollmentDate: '2024-08-15',
-    performanceHistory: [
-      { month: 'Sep', gpa: 3.5, attendance: 95 },
-      { month: 'Oct', gpa: 3.6, attendance: 92 },
-      { month: 'Nov', gpa: 3.7, attendance: 90 },
-      { month: 'Dec', gpa: 3.7, attendance: 92 }
-    ],
-    badges: ['Perfect Attendance', 'Math Wizard', 'Quick Learner'],
-    streak: 15,
-    studyHours: 28,
-    assignmentsCompleted: 45,
-    totalAssignments: 48
-  },
-  {
-    id: uuidv4(),
-    userId: null,
-    studentId: 'STU002',
-    firstName: 'Sarah',
-    lastName: 'Williams',
-    email: 'sarah.williams@student.edu',
-    grade: '10',
-    section: 'B',
-    subjects: ['Mathematics', 'Biology', 'Chemistry', 'English', 'History'],
-    attendance: 78,
-    currentGPA: 2.8,
-    riskLevel: 'medium',
-    enrollmentDate: '2024-08-15',
-    performanceHistory: [
-      { month: 'Sep', gpa: 3.2, attendance: 88 },
-      { month: 'Oct', gpa: 3.0, attendance: 82 },
-      { month: 'Nov', gpa: 2.9, attendance: 75 },
-      { month: 'Dec', gpa: 2.8, attendance: 78 }
-    ],
-    badges: ['Team Player', 'Creative Thinker'],
-    streak: 5,
-    studyHours: 18,
-    assignmentsCompleted: 38,
-    totalAssignments: 48
-  },
-  {
-    id: uuidv4(),
-    userId: null,
-    studentId: 'STU003',
-    firstName: 'Michael',
-    lastName: 'Chen',
-    email: 'michael.chen@student.edu',
-    grade: '11',
-    section: 'A',
-    subjects: ['Advanced Mathematics', 'Physics', 'Computer Science', 'English', 'Economics'],
-    attendance: 96,
-    currentGPA: 3.9,
-    riskLevel: 'low',
-    enrollmentDate: '2023-08-20',
-    performanceHistory: [
-      { month: 'Sep', gpa: 3.8, attendance: 98 },
-      { month: 'Oct', gpa: 3.85, attendance: 95 },
-      { month: 'Nov', gpa: 3.9, attendance: 97 },
-      { month: 'Dec', gpa: 3.9, attendance: 96 }
-    ],
-    badges: ['Honor Roll', 'Science Star', 'Perfect Attendance', 'Coding Champion'],
-    streak: 30,
-    studyHours: 35,
-    assignmentsCompleted: 50,
-    totalAssignments: 50
-  },
-  {
-    id: uuidv4(),
-    userId: null,
-    studentId: 'STU004',
-    firstName: 'Emily',
-    lastName: 'Davis',
-    email: 'emily.davis@student.edu',
-    grade: '9',
-    section: 'C',
-    subjects: ['Mathematics', 'Biology', 'English', 'Art', 'Geography'],
-    attendance: 65,
-    currentGPA: 2.3,
-    riskLevel: 'high',
-    enrollmentDate: '2024-08-15',
-    performanceHistory: [
-      { month: 'Sep', gpa: 2.8, attendance: 80 },
-      { month: 'Oct', gpa: 2.6, attendance: 72 },
-      { month: 'Nov', gpa: 2.4, attendance: 65 },
-      { month: 'Dec', gpa: 2.3, attendance: 65 }
-    ],
-    badges: ['Art Enthusiast'],
-    streak: 2,
-    studyHours: 12,
-    assignmentsCompleted: 30,
-    totalAssignments: 48
-  },
-  {
-    id: uuidv4(),
-    userId: null,
-    studentId: 'STU005',
-    firstName: 'James',
-    lastName: 'Brown',
-    email: 'james.brown@student.edu',
-    grade: '12',
-    section: 'A',
-    subjects: ['Calculus', 'Physics', 'Chemistry', 'English Literature', 'Psychology'],
-    attendance: 88,
-    currentGPA: 3.4,
-    riskLevel: 'low',
-    enrollmentDate: '2022-08-18',
-    performanceHistory: [
-      { month: 'Sep', gpa: 3.3, attendance: 90 },
-      { month: 'Oct', gpa: 3.35, attendance: 88 },
-      { month: 'Nov', gpa: 3.4, attendance: 86 },
-      { month: 'Dec', gpa: 3.4, attendance: 88 }
-    ],
-    badges: ['Senior Leader', 'Consistent Performer', 'Mentor'],
-    streak: 12,
-    studyHours: 25,
-    assignmentsCompleted: 44,
-    totalAssignments: 48
+// Helper function to read the database
+const readDB = () => {
+  try {
+    const data = fs.readFileSync(DB_PATH, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    return { users: [], students: [], alerts: [], gamification: {} };
   }
-];
+};
 
-// Initialize sample data
-sampleStudents.forEach(student => {
-  students.set(student.id, student);
-});
+// Helper function to write to the database
+const writeDB = (data) => {
+  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
+};
 
 export class Student {
   constructor(data) {
     this.id = data.id || uuidv4();
     this.userId = data.userId;
-    this.studentId = data.studentId;
+    this.studentId = data.studentId || `STU${Date.now()}`;
     this.firstName = data.firstName;
     this.lastName = data.lastName;
     this.email = data.email;
@@ -154,9 +34,11 @@ export class Student {
     this.section = data.section;
     this.subjects = data.subjects || [];
     this.attendance = data.attendance || 0;
-    this.currentGPA = data.currentGPA || 0;
+    this.currentGPA = data.currentGPA || data.gpa || 0;
+    this.gpa = data.gpa || data.currentGPA || 0;
     this.riskLevel = data.riskLevel || 'medium';
-    this.enrollmentDate = data.enrollmentDate;
+    this.predictedGrade = data.predictedGrade || 'B';
+    this.enrollmentDate = data.enrollmentDate || new Date().toISOString();
     this.performanceHistory = data.performanceHistory || [];
     this.badges = data.badges || [];
     this.streak = data.streak || 0;
@@ -168,7 +50,8 @@ export class Student {
   }
 
   static async findAll(filters = {}) {
-    let result = Array.from(students.values());
+    const db = readDB();
+    let result = db.students || [];
     
     if (filters.grade) {
       result = result.filter(s => s.grade === filters.grade);
@@ -184,38 +67,62 @@ export class Student {
   }
 
   static async findById(id) {
-    return students.get(id) || null;
+    const db = readDB();
+    return db.students.find(s => s.id === id) || null;
   }
 
   static async findByStudentId(studentId) {
-    for (const student of students.values()) {
-      if (student.studentId === studentId) return student;
-    }
-    return null;
+    const db = readDB();
+    return db.students.find(s => s.studentId === studentId) || null;
   }
 
   static async create(studentData) {
+    const db = readDB();
     const student = new Student(studentData);
-    students.set(student.id, student);
-    return student;
+    const studentObj = { ...student };
+    db.students.push(studentObj);
+    writeDB(db);
+    return studentObj;
   }
 
   static async update(id, updateData) {
-    const existing = students.get(id);
-    if (!existing) return null;
+    const db = readDB();
+    const index = db.students.findIndex(s => s.id === id);
+    if (index === -1) return null;
     
-    const updated = { ...existing, ...updateData, updatedAt: new Date().toISOString() };
-    students.set(id, updated);
-    return updated;
+    db.students[index] = { 
+      ...db.students[index], 
+      ...updateData, 
+      updatedAt: new Date().toISOString() 
+    };
+    writeDB(db);
+    return db.students[index];
   }
 
   static async delete(id) {
-    return students.delete(id);
+    const db = readDB();
+    const index = db.students.findIndex(s => s.id === id);
+    if (index === -1) return false;
+    
+    db.students.splice(index, 1);
+    writeDB(db);
+    return true;
   }
 
   static async getStats() {
-    const allStudents = Array.from(students.values());
+    const db = readDB();
+    const allStudents = db.students || [];
     const total = allStudents.length;
+    
+    if (total === 0) {
+      return {
+        totalStudents: 0,
+        riskDistribution: { low: 0, medium: 0, high: 0 },
+        averageGPA: 0,
+        averageAttendance: 0,
+        atRiskCount: 0
+      };
+    }
     
     const riskDistribution = {
       low: allStudents.filter(s => s.riskLevel === 'low').length,
@@ -223,8 +130,8 @@ export class Student {
       high: allStudents.filter(s => s.riskLevel === 'high').length
     };
     
-    const avgGPA = allStudents.reduce((sum, s) => sum + s.currentGPA, 0) / total;
-    const avgAttendance = allStudents.reduce((sum, s) => sum + s.attendance, 0) / total;
+    const avgGPA = allStudents.reduce((sum, s) => sum + (s.currentGPA || s.gpa || 0), 0) / total;
+    const avgAttendance = allStudents.reduce((sum, s) => sum + (s.attendance || 0), 0) / total;
     
     return {
       totalStudents: total,

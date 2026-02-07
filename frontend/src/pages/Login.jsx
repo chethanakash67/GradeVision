@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, GraduationCap, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, GraduationCap, Eye, EyeOff, AlertTriangle, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/common/Button';
 import Input from '../components/common/Input';
@@ -12,7 +12,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+  const [isLocked, setIsLocked] = useState(false);
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -20,12 +21,17 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setIsLocked(false);
 
     try {
       const result = await login(email, password);
       if (result.success) {
         navigate('/dashboard');
       } else {
+        // Check if the error is about account lockout (status 423)
+        if (result.status === 423) {
+          setIsLocked(true);
+        }
         setError(result.error || 'Login failed');
       }
     } catch (err) {
@@ -39,7 +45,8 @@ const Login = () => {
     setEmail('demo@gradevision.edu');
     setPassword('demo123');
     setLoading(true);
-    
+    setError('');
+
     try {
       const result = await login('demo@gradevision.edu', 'demo123');
       if (result.success) {
@@ -61,12 +68,12 @@ const Login = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
               <GraduationCap className="w-7 h-7 text-white" />
             </div>
             <span className="text-2xl font-bold text-white">Grade Vision</span>
-          </div>
+          </Link>
         </motion.div>
 
         <motion.div
@@ -143,9 +150,40 @@ const Login = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 bg-danger-50 dark:bg-danger-900/30 border border-danger-200 dark:border-danger-800 rounded-lg"
+                className={`p-4 rounded-lg border ${
+                  isLocked
+                    ? 'bg-warning-50 dark:bg-warning-900/30 border-warning-200 dark:border-warning-800'
+                    : 'bg-danger-50 dark:bg-danger-900/30 border-danger-200 dark:border-danger-800'
+                }`}
               >
-                <p className="text-sm text-danger-700 dark:text-danger-400">{error}</p>
+                <div className="flex items-start gap-3">
+                  {isLocked ? (
+                    <ShieldAlert className="w-5 h-5 text-warning-600 dark:text-warning-400 flex-shrink-0 mt-0.5" />
+                  ) : (
+                    <AlertTriangle className="w-5 h-5 text-danger-600 dark:text-danger-400 flex-shrink-0 mt-0.5" />
+                  )}
+                  <div>
+                    <p className={`text-sm font-medium ${
+                      isLocked
+                        ? 'text-warning-800 dark:text-warning-300'
+                        : 'text-danger-700 dark:text-danger-400'
+                    }`}>
+                      {isLocked ? 'Account Locked' : 'Authentication Error'}
+                    </p>
+                    <p className={`text-sm mt-1 ${
+                      isLocked
+                        ? 'text-warning-700 dark:text-warning-400'
+                        : 'text-danger-600 dark:text-danger-400'
+                    }`}>
+                      {error}
+                    </p>
+                    {isLocked && (
+                      <Link to="/forgot-password" className="inline-block mt-2 text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400">
+                        Reset your password →
+                      </Link>
+                    )}
+                  </div>
+                </div>
               </motion.div>
             )}
 
@@ -186,9 +224,9 @@ const Login = () => {
                 />
                 <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
               </label>
-              <a href="#" className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400">
+              <Link to="/forgot-password" className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400">
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             <Button
@@ -197,6 +235,7 @@ const Login = () => {
               size="lg"
               className="w-full"
               loading={loading}
+              disabled={isLocked}
             >
               Sign In
             </Button>

@@ -1,0 +1,702 @@
+{
+  "users": [
+    {
+      "id": "admin-user-id",
+      "email": "admin@gradevision.edu",
+      "password": "$2a$10$rKN5Y5ZPHPl5YJR.ePxZHOmYb8X5/1PqZB1F6kTQKJ5JZ5nE5H5Vy",
+      "firstName": "Admin",
+      "lastName": "User",
+      "role": "admin",
+      "avatar": null,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "demo-user-id",
+      "email": "demo@gradevision.edu",
+      "password": "$2a$10$rKN5Y5ZPHPl5YJR.ePxZHOmYb8X5/1PqZB1F6kTQKJ5JZ5nE5H5Vy",
+      "firstName": "Demo",
+      "lastName": "User",
+      "role": "teacher",
+      "avatar": null,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "14ccf58d-d73a-4063-872d-20fecbbfb2eb",
+      "email": "chethanakash67@gmail.com",
+      "password": "$2a$10$T0ZLAj8HfwYzl.ipTHcEku7BTAj0onAg28UV4hgqWXjn18pbWZLRW",
+      "firstName": "chethanakash67",
+      "lastName": "User",
+      "role": "student",
+      "avatar": null,
+      "createdAt": "2026-02-06T14:04:18.745Z",
+      "updatedAt": "2026-02-06T18:30:11.686Z",
+      "loginAttempts": 0,
+      "lockUntil": null
+    },
+    {
+      "id": "fe531392-aaef-402e-8a71-7cd028c2fd16",
+      "email": "demo@gradevision.com",
+      "password": "$2a$10$HmSNVGg/w1BRoC.qvBW4uusK6hVkbeaKpxWOAqM5nSbe0FQ8wxn/S",
+      "firstName": "demo",
+      "lastName": "User",
+      "role": "student",
+      "avatar": null,
+      "createdAt": "2026-02-06T14:28:05.222Z",
+      "updatedAt": "2026-02-06T14:28:05.222Z"
+    },
+    {
+      "id": "74b07807-0485-4094-b2ae-63959ea2c7dd",
+      "email": "jainipreetham@gmail.com",
+      "password": "$2a$10$67hvLpoWFPL9Fvj6rGhHa.67KIsv/kErKq4Jgh8T4RDk3HbND2ppy",
+      "firstName": "Sai",
+      "lastName": "Preetham",
+      "role": "student",
+      "avatar": null,
+      "createdAt": "2026-02-07T08:10:27.812Z",
+      "updatedAt": "2026-02-07T08:10:27.812Z"
+    }
+  ],
+  "students": [
+    {
+      "id": "student-1",
+      "studentId": "STU001",
+      "firstName": "Alex",
+      "lastName": "Johnson",
+      "email": "alex.johnson@student.edu",
+      "grade": "10",
+      "section": "A",
+      "attendance": 92,
+      "gpa": 3.7,
+      "currentGPA": 3.7,
+      "riskLevel": "low",
+      "predictedGrade": "A",
+      "subjects": [
+        {
+          "name": "Mathematics",
+          "grade": 88,
+          "trend": "up"
+        },
+        {
+          "name": "Physics",
+          "grade": 85,
+          "trend": "stable"
+        },
+        {
+          "name": "Chemistry",
+          "grade": 82,
+          "trend": "up"
+        },
+        {
+          "name": "English",
+          "grade": 90,
+          "trend": "up"
+        },
+        {
+          "name": "Computer Science",
+          "grade": 95,
+          "trend": "up"
+        }
+      ],
+      "performanceHistory": [
+        {
+          "month": "Sep",
+          "gpa": 3.5,
+          "attendance": 95
+        },
+        {
+          "month": "Oct",
+          "gpa": 3.6,
+          "attendance": 92
+        },
+        {
+          "month": "Nov",
+          "gpa": 3.7,
+          "attendance": 90
+        },
+        {
+          "month": "Dec",
+          "gpa": 3.7,
+          "attendance": 92
+        }
+      ],
+      "badges": [
+        "Perfect Attendance",
+        "Math Wizard",
+        "Quick Learner"
+      ],
+      "streak": 15,
+      "studyHours": 28,
+      "assignmentsCompleted": 45,
+      "totalAssignments": 48,
+      "enrollmentDate": "2025-08-15",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "student-2",
+      "studentId": "STU002",
+      "firstName": "Sarah",
+      "lastName": "Williams",
+      "email": "sarah.williams@student.edu",
+      "grade": "10",
+      "section": "B",
+      "attendance": 78,
+      "gpa": 2.8,
+      "currentGPA": 2.8,
+      "riskLevel": "medium",
+      "predictedGrade": "C+",
+      "subjects": [
+        {
+          "name": "Mathematics",
+          "grade": 72,
+          "trend": "down"
+        },
+        {
+          "name": "Biology",
+          "grade": 75,
+          "trend": "stable"
+        },
+        {
+          "name": "Chemistry",
+          "grade": 70,
+          "trend": "down"
+        },
+        {
+          "name": "English",
+          "grade": 78,
+          "trend": "stable"
+        },
+        {
+          "name": "History",
+          "grade": 80,
+          "trend": "up"
+        }
+      ],
+      "performanceHistory": [
+        {
+          "month": "Sep",
+          "gpa": 3.2,
+          "attendance": 88
+        },
+        {
+          "month": "Oct",
+          "gpa": 3,
+          "attendance": 82
+        },
+        {
+          "month": "Nov",
+          "gpa": 2.9,
+          "attendance": 75
+        },
+        {
+          "month": "Dec",
+          "gpa": 2.8,
+          "attendance": 78
+        }
+      ],
+      "badges": [
+        "Team Player",
+        "Creative Thinker"
+      ],
+      "streak": 5,
+      "studyHours": 18,
+      "assignmentsCompleted": 38,
+      "totalAssignments": 48,
+      "enrollmentDate": "2025-08-15",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "student-3",
+      "studentId": "STU003",
+      "firstName": "Michael",
+      "lastName": "Chen",
+      "email": "michael.chen@student.edu",
+      "grade": "11",
+      "section": "A",
+      "attendance": 96,
+      "gpa": 3.9,
+      "currentGPA": 3.9,
+      "riskLevel": "low",
+      "predictedGrade": "A+",
+      "subjects": [
+        {
+          "name": "Advanced Mathematics",
+          "grade": 95,
+          "trend": "up"
+        },
+        {
+          "name": "Physics",
+          "grade": 92,
+          "trend": "up"
+        },
+        {
+          "name": "Computer Science",
+          "grade": 98,
+          "trend": "up"
+        },
+        {
+          "name": "English",
+          "grade": 88,
+          "trend": "stable"
+        },
+        {
+          "name": "Economics",
+          "grade": 90,
+          "trend": "up"
+        }
+      ],
+      "performanceHistory": [
+        {
+          "month": "Sep",
+          "gpa": 3.8,
+          "attendance": 98
+        },
+        {
+          "month": "Oct",
+          "gpa": 3.85,
+          "attendance": 95
+        },
+        {
+          "month": "Nov",
+          "gpa": 3.9,
+          "attendance": 97
+        },
+        {
+          "month": "Dec",
+          "gpa": 3.9,
+          "attendance": 96
+        }
+      ],
+      "badges": [
+        "Honor Roll",
+        "Science Star",
+        "Perfect Attendance",
+        "Coding Champion"
+      ],
+      "streak": 30,
+      "studyHours": 35,
+      "assignmentsCompleted": 50,
+      "totalAssignments": 50,
+      "enrollmentDate": "2024-08-20",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "student-4",
+      "studentId": "STU004",
+      "firstName": "Emily",
+      "lastName": "Davis",
+      "email": "emily.davis@student.edu",
+      "grade": "9",
+      "section": "C",
+      "attendance": 65,
+      "gpa": 2.3,
+      "currentGPA": 2.3,
+      "riskLevel": "high",
+      "predictedGrade": "D+",
+      "subjects": [
+        {
+          "name": "Mathematics",
+          "grade": 58,
+          "trend": "down"
+        },
+        {
+          "name": "Biology",
+          "grade": 62,
+          "trend": "down"
+        },
+        {
+          "name": "English",
+          "grade": 70,
+          "trend": "stable"
+        },
+        {
+          "name": "Art",
+          "grade": 85,
+          "trend": "up"
+        },
+        {
+          "name": "Geography",
+          "grade": 65,
+          "trend": "down"
+        }
+      ],
+      "performanceHistory": [
+        {
+          "month": "Sep",
+          "gpa": 2.8,
+          "attendance": 80
+        },
+        {
+          "month": "Oct",
+          "gpa": 2.6,
+          "attendance": 72
+        },
+        {
+          "month": "Nov",
+          "gpa": 2.4,
+          "attendance": 65
+        },
+        {
+          "month": "Dec",
+          "gpa": 2.3,
+          "attendance": 65
+        }
+      ],
+      "badges": [
+        "Art Enthusiast"
+      ],
+      "streak": 2,
+      "studyHours": 12,
+      "assignmentsCompleted": 30,
+      "totalAssignments": 48,
+      "enrollmentDate": "2025-08-15",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "student-5",
+      "studentId": "STU005",
+      "firstName": "James",
+      "lastName": "Brown",
+      "email": "james.brown@student.edu",
+      "grade": "12",
+      "section": "A",
+      "attendance": 88,
+      "gpa": 3.4,
+      "currentGPA": 3.4,
+      "riskLevel": "low",
+      "predictedGrade": "B+",
+      "subjects": [
+        {
+          "name": "Calculus",
+          "grade": 82,
+          "trend": "stable"
+        },
+        {
+          "name": "Physics",
+          "grade": 85,
+          "trend": "up"
+        },
+        {
+          "name": "Chemistry",
+          "grade": 80,
+          "trend": "stable"
+        },
+        {
+          "name": "English Literature",
+          "grade": 88,
+          "trend": "up"
+        },
+        {
+          "name": "Psychology",
+          "grade": 90,
+          "trend": "up"
+        }
+      ],
+      "performanceHistory": [
+        {
+          "month": "Sep",
+          "gpa": 3.3,
+          "attendance": 90
+        },
+        {
+          "month": "Oct",
+          "gpa": 3.35,
+          "attendance": 88
+        },
+        {
+          "month": "Nov",
+          "gpa": 3.4,
+          "attendance": 86
+        },
+        {
+          "month": "Dec",
+          "gpa": 3.4,
+          "attendance": 88
+        }
+      ],
+      "badges": [
+        "Senior Leader",
+        "Consistent Performer",
+        "Mentor"
+      ],
+      "streak": 12,
+      "studyHours": 25,
+      "assignmentsCompleted": 44,
+      "totalAssignments": 48,
+      "enrollmentDate": "2023-08-18",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "student-6",
+      "studentId": "STU006",
+      "firstName": "Lisa",
+      "lastName": "Miller",
+      "email": "lisa.miller@student.edu",
+      "grade": "10",
+      "section": "A",
+      "attendance": 68,
+      "gpa": 2.2,
+      "currentGPA": 2.2,
+      "riskLevel": "high",
+      "predictedGrade": "D",
+      "subjects": [
+        {
+          "name": "Mathematics",
+          "grade": 55,
+          "trend": "down"
+        },
+        {
+          "name": "Science",
+          "grade": 60,
+          "trend": "down"
+        },
+        {
+          "name": "English",
+          "grade": 65,
+          "trend": "stable"
+        },
+        {
+          "name": "History",
+          "grade": 62,
+          "trend": "down"
+        },
+        {
+          "name": "Geography",
+          "grade": 58,
+          "trend": "down"
+        }
+      ],
+      "performanceHistory": [
+        {
+          "month": "Sep",
+          "gpa": 2.6,
+          "attendance": 78
+        },
+        {
+          "month": "Oct",
+          "gpa": 2.4,
+          "attendance": 72
+        },
+        {
+          "month": "Nov",
+          "gpa": 2.3,
+          "attendance": 68
+        },
+        {
+          "month": "Dec",
+          "gpa": 2.2,
+          "attendance": 68
+        }
+      ],
+      "badges": [],
+      "streak": 0,
+      "studyHours": 10,
+      "assignmentsCompleted": 25,
+      "totalAssignments": 48,
+      "enrollmentDate": "2025-08-15",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "alerts": [
+    {
+      "id": "alert-1",
+      "studentId": "student-4",
+      "type": "attendance",
+      "severity": "high",
+      "title": "Critical Attendance Drop",
+      "message": "Emily Davis has missed 5 consecutive classes. Attendance dropped below 70%.",
+      "actionRequired": true,
+      "read": false,
+      "createdAt": "2026-02-05T10:00:00.000Z"
+    },
+    {
+      "id": "alert-2",
+      "studentId": "student-6",
+      "type": "attendance",
+      "severity": "high",
+      "title": "Low Attendance Warning",
+      "message": "Lisa Miller's attendance has dropped below 70%",
+      "actionRequired": true,
+      "read": false,
+      "createdAt": "2026-02-04T14:30:00.000Z"
+    },
+    {
+      "id": "alert-3",
+      "studentId": "student-2",
+      "type": "performance",
+      "severity": "medium",
+      "title": "GPA Decline Detected",
+      "message": "Sarah Williams GPA has declined by 0.4 points over the last 2 months.",
+      "actionRequired": true,
+      "read": false,
+      "createdAt": "2026-02-03T09:15:00.000Z"
+    },
+    {
+      "id": "alert-4",
+      "studentId": "student-3",
+      "type": "achievement",
+      "severity": "low",
+      "title": "New Achievement Unlocked",
+      "message": "Michael Chen has earned the '30 Day Streak' badge!",
+      "actionRequired": false,
+      "read": true,
+      "createdAt": "2026-02-02T16:00:00.000Z"
+    },
+    {
+      "id": "alert-5",
+      "studentId": "student-4",
+      "type": "intervention",
+      "severity": "high",
+      "title": "Intervention Required",
+      "message": "Emily Davis performance prediction shows high risk of failing the semester. Immediate intervention recommended.",
+      "actionRequired": true,
+      "read": false,
+      "createdAt": "2026-02-01T11:00:00.000Z"
+    }
+  ],
+  "gamification": {
+    "badges": [
+      {
+        "id": "badge-1",
+        "name": "First Steps",
+        "description": "Complete your first week",
+        "icon": "🎯",
+        "category": "milestone"
+      },
+      {
+        "id": "badge-2",
+        "name": "Perfect Attendance",
+        "description": "100% attendance for a month",
+        "icon": "⭐",
+        "category": "attendance"
+      },
+      {
+        "id": "badge-3",
+        "name": "Math Wizard",
+        "description": "Score 90+ in 3 math tests",
+        "icon": "🧮",
+        "category": "academic"
+      },
+      {
+        "id": "badge-4",
+        "name": "Science Star",
+        "description": "Complete all science labs",
+        "icon": "🔬",
+        "category": "academic"
+      },
+      {
+        "id": "badge-5",
+        "name": "Team Player",
+        "description": "Participate in 5 group projects",
+        "icon": "🤝",
+        "category": "social"
+      },
+      {
+        "id": "badge-6",
+        "name": "Early Bird",
+        "description": "Submit 10 assignments early",
+        "icon": "🌅",
+        "category": "milestone"
+      },
+      {
+        "id": "badge-7",
+        "name": "Quick Learner",
+        "description": "Improve grade by 10%",
+        "icon": "📚",
+        "category": "academic"
+      },
+      {
+        "id": "badge-8",
+        "name": "Creative Thinker",
+        "description": "Excel in creative projects",
+        "icon": "💡",
+        "category": "academic"
+      },
+      {
+        "id": "badge-9",
+        "name": "Honor Roll",
+        "description": "Maintain GPA above 3.5",
+        "icon": "🏆",
+        "category": "academic"
+      },
+      {
+        "id": "badge-10",
+        "name": "Coding Champion",
+        "description": "Complete all coding challenges",
+        "icon": "💻",
+        "category": "academic"
+      }
+    ],
+    "leaderboard": [
+      {
+        "rank": 1,
+        "name": "Michael Chen",
+        "points": 2850,
+        "studentId": "student-3",
+        "avatar": null
+      },
+      {
+        "rank": 2,
+        "name": "Alex Johnson",
+        "points": 2720,
+        "studentId": "student-1",
+        "avatar": null
+      },
+      {
+        "rank": 3,
+        "name": "James Brown",
+        "points": 2450,
+        "studentId": "student-5",
+        "avatar": null
+      },
+      {
+        "rank": 4,
+        "name": "Sarah Williams",
+        "points": 1980,
+        "studentId": "student-2",
+        "avatar": null
+      },
+      {
+        "rank": 5,
+        "name": "Emily Davis",
+        "points": 1520,
+        "studentId": "student-4",
+        "avatar": null
+      },
+      {
+        "rank": 6,
+        "name": "Lisa Miller",
+        "points": 1100,
+        "studentId": "student-6",
+        "avatar": null
+      }
+    ]
+  },
+  "otps": [
+    {
+      "id": "15bc0e3e-9980-4fc3-86f4-53f70d0621aa",
+      "email": "test@example.com",
+      "code": "655779",
+      "purpose": "signup",
+      "attempts": 0,
+      "createdAt": "2026-02-06T18:28:37.577Z",
+      "expiresAt": "2026-02-06T18:33:37.577Z"
+    },
+    {
+      "id": "371932ec-6d85-47a1-8f89-2ee65ffe8802",
+      "email": "chethanakash65@gmail.com",
+      "code": "766755",
+      "purpose": "signup",
+      "attempts": 0,
+      "createdAt": "2026-02-06T18:29:21.716Z",
+      "expiresAt": "2026-02-06T18:34:21.716Z"
+    }
+  ]
+}

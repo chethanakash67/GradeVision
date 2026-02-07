@@ -25,17 +25,15 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Only redirect to login on 401 if we're not already on the login page
-    // and not trying to check auth
-    if (error.response?.status === 401) {
-      const isAuthCheck = error.config?.url === '/auth/me';
-      const isLoginPage = window.location.pathname === '/login';
-      
-      if (!isAuthCheck && !isLoginPage) {
-        localStorage.removeItem('token');
-        window.location.href = '/login';
-      }
-    }
+    // On 401, do NOT clear the token or redirect here.
+    // Let AuthContext be the single source of truth for auth state.
+    // The ProtectedRoute component will handle redirects based on AuthContext's user state.
+    // Clearing the token here causes a race condition:
+    //   1. AuthContext.checkAuth() succeeds and sets user
+    //   2. Dashboard API calls fire
+    //   3. If any returns 401, interceptor clears token
+    //   4. Next re-render, AuthContext finds no token, sets user=null
+    //   5. ProtectedRoute redirects to /login → white screen flash
     return Promise.reject(error);
   }
 );
@@ -44,6 +42,9 @@ api.interceptors.response.use(
 export const authAPI = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
+  sendOtp: (data) => api.post('/auth/send-otp', data),
+  verifyOtp: (data) => api.post('/auth/verify-otp', data),
+  resetPassword: (data) => api.post('/auth/reset-password', data),
   getMe: () => api.get('/auth/me'),
   updateProfile: (data) => api.put('/auth/profile', data),
   changePassword: (data) => api.put('/auth/password', data)

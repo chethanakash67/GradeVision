@@ -1,76 +1,32 @@
 import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// In-memory alert storage
-const alerts = new Map();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DB_PATH = path.join(__dirname, '../../db.json');
 
-// Generate sample alerts
-const sampleAlerts = [
-  {
-    id: uuidv4(),
-    studentId: 'STU004',
-    type: 'attendance',
-    severity: 'high',
-    title: 'Critical Attendance Drop',
-    message: 'Emily Davis has missed 5 consecutive classes. Attendance dropped below 70%.',
-    actionRequired: true,
-    read: false,
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: uuidv4(),
-    studentId: 'STU002',
-    type: 'performance',
-    severity: 'medium',
-    title: 'GPA Decline Detected',
-    message: 'Sarah Williams GPA has declined by 0.4 points over the last 2 months.',
-    actionRequired: true,
-    read: false,
-    createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: uuidv4(),
-    studentId: 'STU003',
-    type: 'achievement',
-    severity: 'low',
-    title: 'New Achievement Unlocked',
-    message: 'Michael Chen has earned the "30 Day Streak" badge!',
-    actionRequired: false,
-    read: true,
-    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: uuidv4(),
-    studentId: 'STU001',
-    type: 'recommendation',
-    severity: 'low',
-    title: 'Study Recommendation',
-    message: 'Based on recent performance, Alex Johnson might benefit from additional practice in Organic Chemistry.',
-    actionRequired: false,
-    read: false,
-    createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: uuidv4(),
-    studentId: 'STU004',
-    type: 'intervention',
-    severity: 'high',
-    title: 'Intervention Required',
-    message: 'Emily Davis performance prediction shows high risk of failing the semester. Immediate intervention recommended.',
-    actionRequired: true,
-    read: false,
-    createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+// Helper function to read the database
+const readDB = () => {
+  try {
+    const data = fs.readFileSync(DB_PATH, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    return { users: [], students: [], alerts: [], gamification: {} };
   }
-];
+};
 
-sampleAlerts.forEach(alert => {
-  alerts.set(alert.id, alert);
-});
+// Helper function to write to the database
+const writeDB = (data) => {
+  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
+};
 
 export class Alert {
   constructor(data) {
     this.id = data.id || uuidv4();
     this.studentId = data.studentId;
-    this.type = data.type; // 'attendance', 'performance', 'achievement', 'recommendation', 'intervention'
+    this.type = data.type; // 'attendance', 'performance', 'achievement', 'recommendation', 'intervention', 'risk'
     this.severity = data.severity || 'medium'; // 'low', 'medium', 'high'
     this.title = data.title;
     this.message = data.message;
@@ -80,7 +36,8 @@ export class Alert {
   }
 
   static async findAll(filters = {}) {
-    let result = Array.from(alerts.values());
+    const db = readDB();
+    let result = db.alerts || [];
     
     if (filters.studentId) {
       result = result.filter(a => a.studentId === filters.studentId);
@@ -102,8 +59,9 @@ export class Alert {
   }
 
   static async findByUser(userId, options = {}) {
+    const db = readDB();
     const { page = 1, limit = 10, type, read } = options;
-    let result = Array.from(alerts.values());
+    let result = db.alerts || [];
     
     if (type) {
       result = result.filter(a => a.type === type);
@@ -128,41 +86,54 @@ export class Alert {
   }
 
   static async findById(id) {
-    return alerts.get(id) || null;
+    const db = readDB();
+    return db.alerts.find(a => a.id === id) || null;
   }
 
   static async create(alertData) {
+    const db = readDB();
     const alert = new Alert(alertData);
-    alerts.set(alert.id, alert);
-    return alert;
+    const alertObj = { ...alert };
+    db.alerts.push(alertObj);
+    writeDB(db);
+    return alertObj;
   }
 
   static async markAsRead(id) {
-    const alert = alerts.get(id);
-    if (!alert) return null;
+    const db = readDB();
+    const index = db.alerts.findIndex(a => a.id === id);
+    if (index === -1) return null;
     
-    alert.read = true;
-    alerts.set(id, alert);
-    return alert;
+    db.alerts[index].read = true;
+    writeDB(db);
+    return db.alerts[index];
   }
 
   static async markAllAsRead(studentId = null) {
-    for (const [id, alert] of alerts.entries()) {
+    const db = readDB();
+    db.alerts.forEach(alert => {
       if (!studentId || alert.studentId === studentId) {
         alert.read = true;
-        alerts.set(id, alert);
       }
-    }
+    });
+    writeDB(db);
     return true;
   }
 
   static async delete(id) {
-    return alerts.delete(id);
+    const db = readDB();
+    const index = db.alerts.findIndex(a => a.id === id);
+    if (index === -1) return false;
+    
+    db.alerts.splice(index, 1);
+    writeDB(db);
+    return true;
   }
 
   static async getUnreadCount(studentId = null) {
+    const db = readDB();
     let count = 0;
-    for (const alert of alerts.values()) {
+    for (const alert of db.alerts) {
       if (!alert.read && (!studentId || alert.studentId === studentId)) {
         count++;
       }
