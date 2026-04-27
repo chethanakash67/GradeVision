@@ -49,13 +49,15 @@
     {
       "id": "74b07807-0485-4094-b2ae-63959ea2c7dd",
       "email": "jainipreetham@gmail.com",
-      "password": "$2a$10$67hvLpoWFPL9Fvj6rGhHa.67KIsv/kErKq4Jgh8T4RDk3HbND2ppy",
+      "password": "$2a$10$v/qZklBWNIDyGfZTsPPALepABsm1qhDYm7bpD3KzvSfEHoR29Bo7q",
       "firstName": "Sai",
       "lastName": "Preetham",
       "role": "student",
       "avatar": null,
       "createdAt": "2026-02-07T08:10:27.812Z",
-      "updatedAt": "2026-02-07T08:10:27.812Z"
+      "updatedAt": "2026-02-07T09:34:04.320Z",
+      "loginAttempts": 0,
+      "lockUntil": null
     }
   ],
   "students": [
@@ -65,7 +67,7 @@
       "firstName": "Alex",
       "lastName": "Johnson",
       "email": "alex.johnson@student.edu",
-      "grade": "10",
+      "grade": "9",
       "section": "A",
       "attendance": 92,
       "gpa": 3.7,

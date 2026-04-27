@@ -208,8 +208,17 @@ const Register = () => {
       <div className="flex-1 flex items-center justify-center p-8 bg-gray-50 dark:bg-gray-900">
         <motion.div
           initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}
-          className="w-full max-w-md"
+          className="w-full max-w-md relative"
         >
+          {/* Back Button */}
+          <Link
+            to="/"
+            className="absolute -top-12 left-0 flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors mb-6 group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-sm font-medium">Back to Home</span>
+          </Link>
+
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-xl flex items-center justify-center">
